@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Locale } from "@/lib/i18n";
 import { SparklesIcon, ClockIcon } from "./icons";
+import { API_BASE_URL } from "@/lib/api";
 
 interface Nudge {
   id: string;
@@ -22,10 +23,10 @@ export default function RuleChangeNotifier({ locale }: { locale: Locale }) {
   const [alertBanner, setAlertBanner] = useState<string | null>(null);
 
   const fetchNudges = () => {
-    fetch("http://localhost:8000/nudges")
+    fetch(`${API_BASE_URL}/nudges`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data: Nudge[]) => setNudges(data))
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function RuleChangeNotifier({ locale }: { locale: Locale }) {
     setLoadingSim(true);
     setAlertBanner(null);
     try {
-      const resp = await fetch("http://localhost:8000/simulate-rule-change", {
+      const resp = await fetch(`${API_BASE_URL}/simulate-rule-change`, {
         method: "POST",
       });
       if (resp.ok) {
@@ -60,7 +61,7 @@ export default function RuleChangeNotifier({ locale }: { locale: Locale }) {
     setLoadingCron(true);
     setAlertBanner(null);
     try {
-      const resp = await fetch("http://localhost:8000/cron/dispatch-nudges", {
+      const resp = await fetch(`${API_BASE_URL}/cron/dispatch-nudges`, {
         method: "POST",
       });
       if (resp.ok) {

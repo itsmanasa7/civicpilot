@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 
 interface Props {
   locale: Locale;
@@ -13,8 +14,7 @@ export default function HealthCheck({ locale }: Props) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-    fetch(`${API_URL}/health`)
+    fetch(`${API_BASE_URL}/health`)
       .then((r) => r.json())
       .then((d) => {
         setStatus(d.status);

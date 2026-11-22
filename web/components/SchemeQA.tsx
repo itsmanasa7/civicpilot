@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 import VoiceRecorder, { playSpokenResponse } from "./VoiceRecorder";
 import {
   HelpCircleIcon,
@@ -58,8 +59,7 @@ export default function SchemeQA({ locale }: Props) {
     setResult(null);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-      const res = await fetch(`${API_URL}/ask`, {
+      const res = await fetch(`${API_BASE_URL}/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: q, lang: locale }),
@@ -218,9 +218,8 @@ export default function SchemeQA({ locale }: Props) {
                       >
                         <span className="font-bold text-emerald-800">[{c.id}]</span>
                         <ChevronDownIcon
-                          className={`w-4 h-4 text-emerald-700 transition-transform ${
-                            isExpanded ? "rotate-180" : ""
-                          }`}
+                          className={`w-4 h-4 text-emerald-700 transition-transform ${isExpanded ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       {isExpanded && (

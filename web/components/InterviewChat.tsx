@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 import VoiceRecorder, { playSpokenResponse } from "./VoiceRecorder";
 import {
   MessageSquareIcon,
@@ -91,8 +92,7 @@ export default function InterviewChat({ locale }: Props) {
     setWhatifDiff(null);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-      const res = await fetch(`${API_URL}/interview`, {
+      const res = await fetch(`${API_BASE_URL}/interview`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "", profile: {}, current_field: null, lang: locale }),
@@ -139,8 +139,7 @@ export default function InterviewChat({ locale }: Props) {
     setLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-      const res = await fetch(`${API_URL}/interview`, {
+      const res = await fetch(`${API_BASE_URL}/interview`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -186,8 +185,7 @@ export default function InterviewChat({ locale }: Props) {
     setWhatifLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-      const res = await fetch(`${API_URL}/whatif`, {
+      const res = await fetch(`${API_BASE_URL}/whatif`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

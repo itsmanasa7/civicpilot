@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Locale } from "@/lib/i18n";
+import { API_BASE_URL, PORTAL_MIRROR_URL } from "@/lib/api";
 
 interface FieldDiff {
   field_id: string;
@@ -88,12 +89,12 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
     setWorkflowState("FILLING");
 
     try {
-      const resp = await fetch("http://localhost:8000/agent/start-fill", {
+      const resp = await fetch(`${API_BASE_URL}/agent/start-fill`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           profile: profile,
-          portal_url: "http://localhost:4000",
+          portal_url: PORTAL_MIRROR_URL,
         }),
       });
 
@@ -121,7 +122,7 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
     setError(null);
 
     try {
-      const resp = await fetch("http://localhost:8000/agent/approve-diff", {
+      const resp = await fetch(`${API_BASE_URL}/agent/approve-diff`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId }),
@@ -164,7 +165,7 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
     setError(null);
 
     try {
-      const resp = await fetch("http://localhost:8000/agent/submit-with-consent", {
+      const resp = await fetch(`${API_BASE_URL}/agent/submit-with-consent`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -354,12 +355,12 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
             <div className="text-xs text-gray-500">
               Target Portal:{" "}
               <a
-                href="http://localhost:4000"
+                href={PORTAL_MIRROR_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-600 hover:underline font-semibold"
               >
-                http://localhost:4000 (PM-KISAN Mirror Sandbox)
+                {PORTAL_MIRROR_URL} (PM-KISAN Mirror Sandbox)
               </a>
             </div>
 

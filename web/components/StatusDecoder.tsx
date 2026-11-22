@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 import {
   ActivitySquareIcon,
   CameraIcon,
@@ -93,8 +94,6 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
     setResult(null);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
       if (selectedFile) {
         const formData = new FormData();
         formData.append("file", selectedFile);
@@ -103,7 +102,7 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
         }
         formData.append("lang", locale);
 
-        const resp = await fetch(`${API_URL}/decode-status`, {
+        const resp = await fetch(`${API_BASE_URL}/decode-status`, {
           method: "POST",
           body: formData,
         });
@@ -114,7 +113,7 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
         const data = await resp.json();
         setResult(data);
       } else {
-        const resp = await fetch(`${API_URL}/decode-status`, {
+        const resp = await fetch(`${API_BASE_URL}/decode-status`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status_text: statusText.trim(), lang: locale }),
@@ -205,8 +204,8 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
                 {selectedFile
                   ? selectedFile.name
                   : locale === "hi"
-                  ? "स्क्रीनशॉट या फोटो अपलोड करें"
-                  : "Upload / Photograph Status Screen"}
+                    ? "स्क्रीनशॉट या फोटो अपलोड करें"
+                    : "Upload / Photograph Status Screen"}
               </span>
               <input
                 type="file"
@@ -278,11 +277,10 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-emerald-500/10">
             <div className="flex items-center gap-2">
               <span
-                className={`px-3 py-1 rounded-full text-xs font-black flex items-center gap-1.5 ${
-                  result.is_known_cause
-                    ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                    : "bg-amber-100 text-amber-800 border border-amber-300"
-                }`}
+                className={`px-3 py-1 rounded-full text-xs font-black flex items-center gap-1.5 ${result.is_known_cause
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                  : "bg-amber-100 text-amber-800 border border-amber-300"
+                  }`}
               >
                 {result.is_known_cause ? (
                   <>
@@ -372,9 +370,8 @@ export default function StatusDecoder({ locale }: StatusDecoderProps) {
                   </span>
                 </div>
                 <ChevronDownIcon
-                  className={`w-4 h-4 text-emerald-700 transition-transform ${
-                    showClauseDetails ? "rotate-180" : ""
-                  }`}
+                  className={`w-4 h-4 text-emerald-700 transition-transform ${showClauseDetails ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 

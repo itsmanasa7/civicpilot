@@ -59,17 +59,27 @@ class PlaywrightRegistrationAgent:
     def __init__(self):
         self.sessions: Dict[str, Dict[str, Any]] = {}
 
-    def _ensure_mirror_available(self, portal_url: str):
-        """Auto-starts background mirror if targeting localhost:4000."""
+    def _ensure_mirror_available(self, portal_url: str) -> str:
+        """Auto-starts background mirror if targeting localhost:4000 or if 8000 is not active."""
+        import socket
         if "localhost:4000" in portal_url or "127.0.0.1:4000" in portal_url:
             start_mirror_in_background(4000)
+            return portal_url
+        if "localhost:8000" in portal_url or "127.0.0.1:8000" in portal_url:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            is_open = sock.connect_ex(("127.0.0.1", 8000)) == 0
+            sock.close()
+            if not is_open:
+                start_mirror_in_background(4000)
+                return "http://localhost:4000"
+        return portal_url
 
     async def start_fill(
-        self, profile_data: Dict[str, Any], portal_url: str = "http://localhost:4000"
+        self, profile_data: Dict[str, Any], portal_url: str = "http://localhost:8000/mirror"
     ) -> StartFillResponse:
         """Launches browser, takes blank screenshot, fills form fields, takes filled screenshot,
         and computes field diffs."""
-        self._ensure_mirror_available(portal_url)
+        portal_url = self._ensure_mirror_available(portal_url)
         profile = RegistrationProfile.from_dict(profile_data)
         session_id = f"sess_{uuid.uuid4().hex[:12]}"
 

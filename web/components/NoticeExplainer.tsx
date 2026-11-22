@@ -2,6 +2,7 @@
 
 import { useState, useRef, DragEvent, ChangeEvent } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 
 interface Citation {
   id: string;
@@ -84,7 +85,6 @@ export default function NoticeExplainer({ locale }: Props) {
     setLoadingStep(t(locale, "analyzing"));
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
       const formData = new FormData();
       formData.append("file", file);
       formData.append("lang", locale);
@@ -93,7 +93,7 @@ export default function NoticeExplainer({ locale }: Props) {
         setLoadingStep(t(locale, "matching_clauses"));
       }, 1500);
 
-      const res = await fetch(`${API_URL}/explain-notice`, {
+      const res = await fetch(`${API_BASE_URL}/explain-notice`, {
         method: "POST",
         body: formData,
       });
@@ -168,11 +168,10 @@ export default function NoticeExplainer({ locale }: Props) {
           }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
-            isDragOver
-              ? "border-blue-500 bg-blue-50/50"
-              : "border-gray-300 hover:border-gray-400 bg-gray-50/50"
-          }`}
+          className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${isDragOver
+            ? "border-blue-500 bg-blue-50/50"
+            : "border-gray-300 hover:border-gray-400 bg-gray-50/50"
+            }`}
         >
           {file ? (
             <div className="flex flex-col items-center space-y-3">
@@ -349,11 +348,10 @@ export default function NoticeExplainer({ locale }: Props) {
                   </span>
                 )}
                 <span
-                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                    result.confidence >= 0.7
-                      ? "bg-green-100 text-green-700"
-                      : "bg-amber-100 text-amber-700"
-                  }`}
+                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${result.confidence >= 0.7
+                    ? "bg-green-100 text-green-700"
+                    : "bg-amber-100 text-amber-700"
+                    }`}
                 >
                   {Math.round(result.confidence * 100)}% {t(locale, "confidence_score")}
                 </span>

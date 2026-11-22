@@ -34,3 +34,10 @@
 ### Clause PMK-A-2.0: Identification and Recovery from Ineligible Tax Payers
 1. Any beneficiary or beneficiary family member who has paid income tax under the Income Tax Act, 1961 in the preceding assessment year is strictly ineligible.
 2. If payments have been erroneously disbursed to an income tax payee, the State Government shall issue a formal recovery demand notice directing refund of the principal amount to the designated State PM-KISAN nodal recovery account.
+
+
+## Clause PMK-A-1.3: Amendment 2026.2 - Stricter Cutoff Date Enforcement on Land Transfers
+**Effective Date**: 2026-04-01  
+**Clause ID**: PMK-A-1.3  
+**Rule Version**: 2026.2  
+**Text**: As per the Ministry of Agriculture and Farmers Welfare notification, all cultivable land parcels transferred, mutated, or registered in the beneficiary's name after the scheme cutoff date of 01-February-2019 are strictly disqualified from PM-KISAN benefits. Beneficiaries whose land mutation occurred post-cutoff without a certified succession certificate from the competent revenue authority (Tehsil/SDM) will have their installment disbursements withheld immediately.

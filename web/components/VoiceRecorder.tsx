@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Locale } from "@/lib/i18n";
 import { MicIcon, MicOffIcon, Volume2Icon } from "./icons";
+import { API_BASE_URL } from "@/lib/api";
 
 interface VoiceRecorderProps {
   locale: Locale;
@@ -164,7 +165,7 @@ export default function VoiceRecorder({
       formData.append("file", blob, "voice_input.webm");
       formData.append("lang", locale);
 
-      const resp = await fetch("http://localhost:8000/voice/transcribe", {
+      const resp = await fetch(`${API_BASE_URL}/voice/transcribe`, {
         method: "POST",
         body: formData,
       });

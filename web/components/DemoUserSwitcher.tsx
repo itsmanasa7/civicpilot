@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Locale } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 
 interface DemoUser {
   id: string;
@@ -29,7 +30,7 @@ export default function DemoUserSwitcher({
   const [currentId, setCurrentId] = useState(selectedUserId);
 
   useEffect(() => {
-    fetch("http://localhost:8000/demo-users")
+    fetch(`${API_BASE_URL}/demo-users`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data: DemoUser[]) => {
         setUsers(data);

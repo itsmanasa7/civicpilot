@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Locale, t } from "@/lib/i18n";
+import { API_BASE_URL } from "@/lib/api";
 
 interface DiscrepancyItem {
   field: string;
@@ -45,9 +46,8 @@ export default function DocumentReconciliation({ locale }: Props) {
     setEditingField(null);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
       // Calling POST /reconcile with no body loads the synthetic demo-data files
-      const res = await fetch(`${API_URL}/reconcile`, {
+      const res = await fetch(`${API_BASE_URL}/reconcile`, {
         method: "POST",
       });
 
@@ -75,8 +75,7 @@ export default function DocumentReconciliation({ locale }: Props) {
     }
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-      const res = await fetch(`${API_URL}/reconcile`, {
+      const res = await fetch(`${API_BASE_URL}/reconcile`, {
         method: "POST",
         body: formData,
       });
@@ -104,8 +103,6 @@ export default function DocumentReconciliation({ locale }: Props) {
     setSaveLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
       // Prepare updated extracted_fields_by_doc
       const updatedDocs = { ...data.extracted_fields_by_doc };
       for (const [docKey, newVal] of Object.entries(editValues)) {
@@ -117,7 +114,7 @@ export default function DocumentReconciliation({ locale }: Props) {
         }
       }
 
-      const res = await fetch(`${API_URL}/reconcile/correct`, {
+      const res = await fetch(`${API_BASE_URL}/reconcile/correct`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -258,13 +255,12 @@ export default function DocumentReconciliation({ locale }: Props) {
                     return (
                       <tr
                         key={item.field}
-                        className={`hover:bg-gray-50/70 transition-colors ${
-                          item.severity === "CRITICAL"
-                            ? "bg-red-50/30"
-                            : item.severity === "MODERATE"
+                        className={`hover:bg-gray-50/70 transition-colors ${item.severity === "CRITICAL"
+                          ? "bg-red-50/30"
+                          : item.severity === "MODERATE"
                             ? "bg-amber-50/20"
                             : ""
-                        }`}
+                          }`}
                       >
                         {/* Field Label */}
                         <td className="py-4 px-4 font-bold text-gray-900 whitespace-nowrap">
@@ -338,15 +334,14 @@ export default function DocumentReconciliation({ locale }: Props) {
                         {/* Severity Badge */}
                         <td className="py-4 px-4 whitespace-nowrap">
                           <span
-                            className={`px-2.5 py-1 rounded-full text-2xs font-extrabold ${
-                              item.severity === "CRITICAL"
-                                ? "bg-red-100 text-red-800"
-                                : item.severity === "MODERATE"
+                            className={`px-2.5 py-1 rounded-full text-2xs font-extrabold ${item.severity === "CRITICAL"
+                              ? "bg-red-100 text-red-800"
+                              : item.severity === "MODERATE"
                                 ? "bg-amber-100 text-amber-800"
                                 : item.severity === "MINOR"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-emerald-100 text-emerald-800"
-                            }`}
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-emerald-100 text-emerald-800"
+                              }`}
                           >
                             {item.severity} ({Math.round(item.similarity_score * 100)}%)
                           </span>

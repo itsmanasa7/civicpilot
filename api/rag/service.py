@@ -43,10 +43,13 @@ class RAGService:
         # Workspace relative paths
         here = Path(__file__).resolve().parent
         candidates.extend([
-            Path("c:/civicpilot/corpus/pmkisan"),
             here.parent.parent / "corpus" / "pmkisan",
             here.parent / "corpus" / "pmkisan",
+            Path.cwd() / "corpus" / "pmkisan",
+            Path.cwd().parent / "corpus" / "pmkisan",
             Path("corpus/pmkisan"),
+            Path("../corpus/pmkisan"),
+            Path("c:/civicpilot/corpus/pmkisan"),
         ])
 
         for c in candidates:

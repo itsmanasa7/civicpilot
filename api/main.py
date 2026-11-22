@@ -15,6 +15,8 @@ for candidate_env in [
 
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlmodel import SQLModel, create_engine
 
 from rag.service import RAGService, AskRequest, AskResponse
@@ -72,20 +74,56 @@ async def lifespan(app: FastAPI):
     create_db_and_tables()
     # Auto-index corpus if database has no chunks
     if rag_service.db.count() == 0:
-        rag_service.index_corpus()
+        indexed_count = rag_service.index_corpus()
+        print(f"[Lifespan] Rebuilt SQLite FTS index from corpus: {indexed_count} chunks indexed.")
     yield
     # Cleanup any active browser sessions
     await registration_agent.cleanup_all()
 
 app = FastAPI(title="CivicPilot API", version="1.0.0", lifespan=lifespan)
 
+# Allow CORS origins from ALLOWED_ORIGINS env var
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "").strip()
+cors_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+if allowed_origins_env:
+    for o in allowed_origins_env.split(","):
+        stripped = o.strip()
+        if stripped and stripped not in cors_origins:
+            cors_origins.append(stripped)
+else:
+    cors_origins.append("*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve PM-KISAN portal mirror directly from FastAPI at /mirror
+mirror_candidates = [
+    Path(__file__).resolve().parent.parent / "mirror",
+    Path(__file__).resolve().parent / "mirror",
+    Path.cwd() / "mirror",
+    Path.cwd().parent / "mirror",
+    Path("../mirror"),
+    Path("mirror"),
+]
+mirror_dir = next((c for c in mirror_candidates if c.exists() and c.is_dir()), None)
+
+if mirror_dir:
+    app.mount("/mirror", StaticFiles(directory=str(mirror_dir), html=True), name="mirror")
+
+    @app.get("/mirror")
+    def serve_mirror():
+        index_file = mirror_dir / "index.html"
+        if index_file.exists():
+            return FileResponse(str(index_file))
+        raise HTTPException(status_code=404, detail="Mirror not found")
 
 @app.get("/health")
 def health():
@@ -147,12 +185,19 @@ async def reconcile_documents(
             parsed_docs[doc_key] = parsed
     else:
         # Load synthetic sample documents from demo-data
-        demo_dir = Path("c:/civicpilot/demo-data")
-        if not demo_dir.exists():
-            demo_dir = Path(__file__).resolve().parent.parent / "demo-data"
-
-        for json_path in demo_dir.glob("*.json"):
-            parsed_docs[json_path.stem] = json.loads(json_path.read_text(encoding="utf-8"))
+        demo_candidates = [
+            Path(__file__).resolve().parent.parent / "demo-data",
+            Path(__file__).resolve().parent / "demo-data",
+            Path.cwd() / "demo-data",
+            Path.cwd().parent / "demo-data",
+            Path("demo-data"),
+            Path("../demo-data"),
+            Path("c:/civicpilot/demo-data"),
+        ]
+        demo_dir = next((c for c in demo_candidates if c.exists() and c.is_dir()), None)
+        if demo_dir:
+            for json_path in demo_dir.glob("*.json"):
+                parsed_docs[json_path.stem] = json.loads(json_path.read_text(encoding="utf-8"))
 
     return reconciler.reconcile(parsed_docs)
 

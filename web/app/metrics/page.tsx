@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { API_BASE_URL } from "@/lib/api";
 
 interface DimensionMetrics {
   eligibility_accuracy_pct: number;
@@ -41,7 +42,7 @@ export default function MetricsPage() {
 
   const fetchLatest = async () => {
     try {
-      const resp = await fetch("http://localhost:8000/eval/latest");
+      const resp = await fetch(`${API_BASE_URL}/eval/latest`);
       if (resp.ok) {
         const json = await resp.json();
         setData(json);
@@ -59,7 +60,7 @@ export default function MetricsPage() {
     setLoading(true);
     setError(null);
     try {
-      const resp = await fetch("http://localhost:8000/eval/run", {
+      const resp = await fetch(`${API_BASE_URL}/eval/run`, {
         method: "POST",
       });
       if (resp.ok) {
