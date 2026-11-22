@@ -1,0 +1,149 @@
+version: "1.0"
+scheme: "PM-KISAN"
+
+causes:
+  - id: "CAUSE_EKYC_PENDING"
+    title: "Mandatory e-KYC Verification Pending"
+    patterns:
+      - "ekyc pending"
+      - "e-kyc pending"
+      - "ekyc not done"
+      - "e-kyc not done"
+      - "e-kyc status: no"
+      - "ekyc: no"
+      - "ekyc mandatory"
+      - "biometric verification pending"
+      - "otp ekyc pending"
+      - "otp e-kyc pending"
+      - "aadhaar e-kyc pending"
+      - "aadhaar ekyc pending"
+      - "ekyc is not complete"
+      - "e-kyc is not complete"
+      - "ekyc not complete"
+      - "e-kyc not complete"
+      - "complete ekyc"
+      - "ई-केवाईसी लंबित"
+      - "ई-केवाईसी नहीं"
+    root_cause: "Beneficiary has not completed biometric (fingerprint/facial) or OTP e-KYC authentication on the PM-KISAN portal or CSC."
+    fix_action:
+      - "Visit the official PM-KISAN portal (pmkisan.gov.in) and click the 'e-KYC' tab."
+      - "Enter your 12-digit Aadhaar number and authenticate with the OTP sent to your Aadhaar-linked mobile phone."
+      - "Alternatively, visit any Common Service Centre (CSC) for biometric thumb-scan verification."
+    clause_id: "PMK-A-1.1"
+    designated_office: "Common Service Centre (CSC) or Online at pmkisan.gov.in"
+    is_recoverable: true
+
+  - id: "CAUSE_AADHAAR_BANK_MISMATCH"
+    title: "Aadhaar Not Seeded with Bank Account (NPCI Mapping Pending)"
+    patterns:
+      - "aadhaar not seeded"
+      - "aadhaar-bank mismatch"
+      - "npci mapping pending"
+      - "aadhaar bank linkage failed"
+      - "aadhaar not mapped with bank"
+      - "dbt inactive in bank"
+      - "आधार बैंक खाता लिंक नहीं"
+      - "एनपीसीआई मैपिंग लंबित"
+    root_cause: "Your Aadhaar number is not linked or mapped with your bank account on the National Payments Corporation of India (NPCI) Aadhaar Payment Bridge."
+    fix_action:
+      - "Visit your home bank branch in person with a copy of your Aadhaar card and passbook."
+      - "Fill and submit the 'Aadhaar NPCI Seeding Mandate Form' requesting active DBT mapping."
+      - "Alternatively, open an instant DBT-enabled savings account at your local India Post Payments Bank (IPPB) branch, which automatically maps NPCI within 48 hours."
+    clause_id: "PMK-G-6.0"
+    designated_office: "Home Bank Branch or India Post Payments Bank (IPPB)"
+    is_recoverable: true
+
+  - id: "CAUSE_LAND_SEEDING_PENDING"
+    title: "Land Record Seeding Pending (Bhulekh Linkage Required)"
+    patterns:
+      - "land seeding no"
+      - "land seeding: no"
+      - "land record not verified"
+      - "bhulekh verification pending"
+      - "land details not found"
+      - "भूमि सीडिंग नहीं"
+      - "भूलेख सत्यापन लंबित"
+    root_cause: "Cultivable land parcel details have not been digitally verified and marked 'Yes' in the State Revenue portal (Bhulekh)."
+    fix_action:
+      - "Obtain a certified copy of your updated Land Record (Khatauni / Khasra / RoR) from the Tehsil or online Bhulekh portal."
+      - "Submit the copy to your local Lekhpal / Patwari or Block Agriculture Officer."
+      - "Request them to mark 'Land Seeding Status: Yes' on the PM-KISAN administrative portal."
+    clause_id: "PMK-A-1.2"
+    designated_office: "Tehsil / Lekhpal (Patwari) Office"
+    is_recoverable: true
+
+  - id: "CAUSE_PFMS_ACCOUNT_REJECTED"
+    title: "Bank Account Rejected by PFMS"
+    patterns:
+      - "rejected by pfms"
+      - "invalid bank account"
+      - "invalid account number"
+      - "pfms bank rejected"
+      - "pfms status: account rejected"
+      - "account rejected by bank"
+      - "rejected by bank"
+      - "account rejected"
+      - "ifsc code invalid"
+      - "invalid ifsc"
+      - "account closed or dormant"
+      - "पीएफ़एमएस अस्वीकृत"
+      - "बैंक खाता अमान्य"
+    root_cause: "The Public Financial Management System (PFMS) rejected your bank details due to a dormant account, invalid IFSC code, or merger of bank branches."
+    fix_action:
+      - "Ensure your bank account is active by making a small deposit or withdrawal."
+      - "Verify the new merged IFSC code with your bank branch."
+      - "Submit the updated bank passbook copy to the District Agriculture Office to update your PFMS record."
+    clause_id: "PMK-G-6.0"
+    designated_office: "District Agriculture Office or Bank Branch"
+    is_recoverable: true
+
+  - id: "CAUSE_NAME_MISMATCH"
+    title: "Beneficiary Name Differs from Aadhaar Record"
+    patterns:
+      - "name mismatch"
+      - "name does not match with aadhaar"
+      - "beneficiary name differed"
+      - "aadhaar name mismatch"
+      - "नाम में विसंगति"
+      - "आधार के अनुसार नाम नहीं"
+    root_cause: "The beneficiary name registered on the PM-KISAN portal does not match the spelling recorded in the Aadhaar database."
+    fix_action:
+      - "Log in to pmkisan.gov.in and click on 'Edit Aadhaar Failure Records' under Farmers Corner."
+      - "Correct your name spelling to match your Aadhaar card exactly."
+      - "If the portal is locked, contact the Tehsil Agriculture Nodal Officer with your Aadhaar card."
+    clause_id: "PMK-G-4.2"
+    designated_office: "Tehsil Office / CSC / Online Portal"
+    is_recoverable: true
+
+  - id: "CAUSE_INCOME_TAX_EXCLUSION"
+    title: "Ineligible Due to Income Tax Payer Exclusion"
+    patterns:
+      - "income tax payee"
+      - "ineligible due to it return"
+      - "taxpayer exclusion"
+      - "paid income tax in previous ay"
+      - "आयकर दाता अपात्रता"
+    root_cause: "The beneficiary or a family member has been identified as an Income Tax payer in the preceding assessment year."
+    fix_action:
+      - "If flagged in error, obtain your ITR assessment copy or non-filing declaration."
+      - "Submit an appeal to the District Grievance Redressal Committee chaired by the District Collector."
+      - "If genuine, this is a permanent exclusion under scheme guidelines Clause PMK-A-2.0."
+    clause_id: "PMK-A-2.0"
+    designated_office: "District Collectorate / District Agriculture Officer"
+    is_recoverable: false
+
+  - id: "CAUSE_PENSIONER_EXCLUSION"
+    title: "Ineligible Due to High Monthly Pension (>= Rs. 10,000)"
+    patterns:
+      - "pensioner limit exceeded"
+      - "monthly pension > 10000"
+      - "high pension exclusion"
+      - "पेंशनर सीमा पार"
+    root_cause: "Retired government pensioner with a monthly pension of Rs. 10,000/- or higher."
+    fix_action:
+      - "If the retired employee was in Class IV / Group D / MTS, this exclusion does not apply."
+      - "Submit your Pension Payment Order (PPO) proving Group D / Class IV status to the District Agriculture Officer for exemption."
+    clause_id: "PMK-G-5.1"
+    designated_office: "District Agriculture Office"
+    is_recoverable: true
+

@@ -1,0 +1,12 @@
+{
+  "document_type": "Aadhaar Card",
+  "document_id": "9876-5432-1098",
+  "name": "Ramesh Kumar Patel",
+  "father_or_spouse_name": "Suresh Chandra Patel",
+  "dob": "1978-05-12",
+  "gender": "Male",
+  "address": "Village Rampur, Post Karchana, Prayagraj, Uttar Pradesh - 212301",
+  "pincode": "212301",
+  "district": "Prayagraj",
+  "state": "Uttar Pradesh"
+}

@@ -1,0 +1,14 @@
+STATE BANK OF INDIA / भारतीय स्टेट बैंक
+BRANCH: KARCHANA (01234) | DIST: ALLAHABAD
+
+ACCOUNT PASSBOOK / खाता विवरण
+A/C No: 30891234567
+CIF No: 88712340912
+IFSC: SBIN0001234
+
+Account Holder: Rameshkumar Patel
+(Note: Deliberate mismatch - 'Rameshkumar' merged without space)
+S/O: Suresh C Patel
+Address: Rampur, Karchana, Allahabad - 212301
+Aadhaar Seeding Status: Active / NPCI Mapped (Yes)
+Account Status: Active for DBT

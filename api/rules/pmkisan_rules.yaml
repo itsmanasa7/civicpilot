@@ -1,0 +1,158 @@
+rules_version: "2024.1"
+scheme: "PM-KISAN"
+
+rules:
+  # =========================================================================
+  # 1. LANDHOLDING CRITERIA
+  # =========================================================================
+  - rule_id: "RULE_LAND_OWNERSHIP"
+    name: "Ownership of Cultivable Land"
+    clause_id: "PMK-G-4.2"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["owns_cultivable_land"]
+    field: "owns_cultivable_land"
+    type: "boolean_true"
+    failure_reason: "Beneficiary does not own cultivable agricultural land in their name."
+    citation: "Clause 4.2: All landholding farmer families who hold cultivable landholding in their names are eligible to receive benefits under the PM-KISAN scheme."
+
+  - rule_id: "RULE_LAND_AREA"
+    name: "Valid Cultivable Landholding Area"
+    clause_id: "PMK-G-4.2"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["land_area_hectares"]
+    field: "land_area_hectares"
+    type: "greater_than_zero"
+    failure_reason: "Cultivable land area must be greater than zero hectares."
+    citation: "Clause 4.2: Cultivable landholding must be verified against State Revenue Department digitized RoR records."
+
+  - rule_id: "RULE_LAND_RECORD_SEEDING"
+    name: "State Portal Land Record Verification (Bhulekh)"
+    clause_id: "PMK-A-1.2"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["land_record_seeded"]
+    field: "land_record_seeded"
+    type: "boolean_true"
+    failure_reason: "Land record has not been digitally verified or seeded on the State PM-KISAN portal."
+    citation: "Amendment 1.2: All beneficiary records must undergo physical verification and digital land record seeding (Bhulekh / RoR linkage)."
+
+  # =========================================================================
+  # 2. AADHAAR & E-KYC REQUIREMENTS
+  # =========================================================================
+  - rule_id: "RULE_AADHAAR_SEEDED"
+    name: "Aadhaar Bank Account Seeding"
+    clause_id: "PMK-A-1.1"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["aadhaar_seeded"]
+    field: "aadhaar_seeded"
+    type: "boolean_true"
+    failure_reason: "Aadhaar number is not linked/seeded with beneficiary bank account via NPCI."
+    citation: "Amendment 1.1 & Clause 6.0: All payments require Aadhaar-based bank account mapping via NPCI Aadhaar Payment Bridge."
+
+  - rule_id: "RULE_EKYC_MANDATORY"
+    name: "Mandatory Biometric or OTP e-KYC"
+    clause_id: "PMK-A-1.1"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["ekyc_completed"]
+    field: "ekyc_completed"
+    type: "boolean_true"
+    failure_reason: "Biometric or OTP e-KYC authentication has not been completed."
+    citation: "Amendment 1.1: Aadhaar-based authentication and biometric/OTP e-KYC have been made strictly mandatory for all beneficiaries."
+
+  # =========================================================================
+  # 3. DIRECT BENEFIT TRANSFER (DBT) BANK ACCOUNT
+  # =========================================================================
+  - rule_id: "RULE_BANK_DBT_ACTIVE"
+    name: "Active DBT Bank Account"
+    clause_id: "PMK-G-6.0"
+    rule_version: "1.0"
+    category: "eligibility"
+    required_fields: ["bank_account_dbt_active"]
+    field: "bank_account_dbt_active"
+    type: "boolean_true"
+    failure_reason: "Bank account is not active for Direct Benefit Transfer (DBT) deposits."
+    citation: "Clause 6.0: All financial payments are disbursed directly into Aadhaar-seeded bank accounts through PFMS."
+
+  # =========================================================================
+  # 4. EXCLUSION CATEGORIES
+  # =========================================================================
+  - rule_id: "RULE_EXCL_INSTITUTIONAL"
+    name: "Institutional Landholder Exclusion"
+    clause_id: "PMK-G-5.1"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["is_institutional_landholder"]
+    field: "is_institutional_landholder"
+    type: "boolean_false"
+    failure_reason: "Institutional landholders are strictly excluded from receiving scheme benefits."
+    citation: "Clause 5.1 & Clause 5.0(1): All institutional landholders are strictly ineligible under PM-KISAN."
+
+  - rule_id: "RULE_EXCL_CONSTITUTIONAL"
+    name: "Constitutional Post Holder Exclusion"
+    clause_id: "PMK-G-5.0"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["is_constitutional_post_holder"]
+    field: "is_constitutional_post_holder"
+    type: "boolean_false"
+    failure_reason: "Former and present holders of constitutional posts are excluded."
+    citation: "Clause 5.0(2): Former and present holders of constitutional posts, Ministers, MPs, MLAs, and Mayors are ineligible."
+
+  - rule_id: "RULE_EXCL_GOVT_EMPLOYEE"
+    name: "Government / PSU Employee Exclusion"
+    clause_id: "PMK-G-5.1"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["is_government_employee"]
+    field: "is_government_employee"
+    type: "govt_employee_check"
+    failure_reason: "Serving/retired government officers or employees (excluding Class IV / Group D / MTS) are ineligible."
+    citation: "Clause 5.1: Serving or retired officers and employees of Central/State Govt/PSUs are excluded, except Class IV / Group D / Multi-Tasking Staff."
+
+  - rule_id: "RULE_EXCL_PENSIONER"
+    name: "High Monthly Pension Exclusion"
+    clause_id: "PMK-G-5.1"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["monthly_pension"]
+    field: "monthly_pension"
+    type: "pension_limit_check"
+    failure_reason: "Retired pensioners whose monthly pension is Rs. 10,000/- or more (excluding Class IV / Group D) are ineligible."
+    citation: "Clause 5.1: All retired pensioners whose monthly pension is Rs. 10,000/- or more (excluding Class IV / Group D) are excluded."
+
+  - rule_id: "RULE_EXCL_INCOME_TAX"
+    name: "Income Tax Payer Exclusion"
+    clause_id: "PMK-A-2.0"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["paid_income_tax_last_ay"]
+    field: "paid_income_tax_last_ay"
+    type: "boolean_false"
+    failure_reason: "Beneficiary paid income tax in the last assessment year."
+    citation: "Amendment 2.0: All persons who paid Income Tax in the last assessment year are categorically excluded."
+
+  - rule_id: "RULE_EXCL_FAMILY_INCOME_TAX"
+    name: "Family Member Income Tax Exclusion"
+    clause_id: "PMK-A-2.0"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["family_member_paid_income_tax"]
+    field: "family_member_paid_income_tax"
+    type: "boolean_false"
+    failure_reason: "A member of the beneficiary farmer family paid income tax in the preceding assessment year."
+    citation: "Amendment 2.0: If any member of the farmer family paid income tax in the preceding assessment year, the entire family is deemed ineligible."
+
+  - rule_id: "RULE_EXCL_PROFESSIONAL"
+    name: "Registered Professional Exclusion"
+    clause_id: "PMK-G-5.0"
+    rule_version: "1.0"
+    category: "exclusion"
+    required_fields: ["is_registered_professional"]
+    field: "is_registered_professional"
+    type: "boolean_false"
+    failure_reason: "Registered professionals (Doctors, Engineers, Lawyers, Chartered Accountants, Architects) are excluded."
+    citation: "Clause 5.0(2): Professionals like Doctors, Engineers, Lawyers, Chartered Accountants, and Architects registered with professional bodies are excluded."

@@ -1,0 +1,60 @@
+# Environment variables & secrets (CRITICAL: NEVER COMMIT API KEYS)
+.env
+.env.*
+*.env
+!.env.example
+api/.env
+web/.env.local
+web/.env*.local
+
+# Dependencies
+node_modules/
+**/node_modules/
+.venv/
+**/.venv/
+venv/
+**/venv/
+
+# Python cache & build artifacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+**/.pytest_cache/
+
+# Next.js build output
+.next/
+**/.next/
+out/
+build/
+dist/
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+api/civicpilot_rag.db
+api/civicpilot.db
+
+# Playwright Agent screenshots and audit logs
+api/agent/screenshots/*
+!api/agent/screenshots/.gitkeep
+api/agent/audit_logs/*
+!api/agent/audit_logs/.gitkeep
+screenshots/
+**/screenshots/
+audit_logs/
+**/audit_logs/
+
+# Logs & debug files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

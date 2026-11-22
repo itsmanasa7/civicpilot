@@ -1,0 +1,10 @@
+{
+  "document_type": "Bank Passbook",
+  "bank_name": "State Bank of India",
+  "account_number": "30891234567",
+  "ifsc": "SBIN0001234",
+  "name": "Rameshkumar Patel",
+  "father_or_spouse_name": "Suresh C Patel",
+  "address": "Rampur, Karchana, Allahabad - 212301",
+  "aadhaar_seeded": true
+}
