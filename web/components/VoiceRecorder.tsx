@@ -116,8 +116,8 @@ export default function VoiceRecorder({
         mimeType: MediaRecorder.isTypeSupported("audio/webm")
           ? "audio/webm"
           : MediaRecorder.isTypeSupported("audio/mp4")
-          ? "audio/mp4"
-          : "",
+            ? "audio/mp4"
+            : "",
       });
 
       mediaRecorder.ondataavailable = (event) => {
@@ -174,7 +174,12 @@ export default function VoiceRecorder({
         const data = await resp.json();
         if (data.text) {
           onTranscription(data.text);
+        } else if (data.error) {
+          alert(data.error);
         }
+      } else {
+        const errJson = await resp.json().catch(() => ({}));
+        alert(errJson.detail || "Voice transcription failed.");
       }
     } catch (e) {
       console.error("Transcription error:", e);

@@ -53,7 +53,10 @@ class FieldDiff(BaseModel):
 
 class StartFillRequest(BaseModel):
     profile: Dict[str, Any] = Field(..., description="Verified citizen profile fields")
-    portal_url: Optional[str] = Field(default="http://localhost:8000/mirror", description="Mirror portal URL")
+    portal_url: Optional[str] = Field(
+        default=None,
+        description="Mirror portal URL (defaults to MIRROR_URL env var or http://localhost:8000/mirror)",
+    )
 
 
 class StartFillResponse(BaseModel):

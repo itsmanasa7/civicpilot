@@ -141,3 +141,22 @@ def test_api_agent_http_endpoints(sample_profile):
             assert audit_json["consent_verification"]["explicit_citizen_consent_granted"] is True
 
     asyncio.run(_test_http())
+
+
+def test_agent_chromium_unavailable_graceful_failure(sample_profile):
+    """Verifies that if Chromium is unavailable, a clear message is returned rather than crashing."""
+    from agent.browser_agent import PlaywrightRegistrationAgent
+    from unittest.mock import patch, AsyncMock
+    agent = PlaywrightRegistrationAgent()
+
+    async def _test():
+        with patch("agent.browser_agent.async_playwright") as mock_pw_factory:
+            mock_pw_context = AsyncMock()
+            mock_pw_context.chromium.launch.side_effect = Exception("Executable doesn't exist at /root/.cache/ms-playwright/chromium")
+            mock_pw_factory.return_value.start = AsyncMock(return_value=mock_pw_context)
+
+            with pytest.raises(RuntimeError) as exc_info:
+                await agent.start_fill(sample_profile)
+            assert "Playwright Chromium browser is unavailable" in str(exc_info.value)
+
+    asyncio.run(_test())

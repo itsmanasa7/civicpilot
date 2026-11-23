@@ -62,3 +62,20 @@ def test_api_voice_turn_interview(client):
     assert "transcription" in data
     assert "reply_text" in data
     assert "interview" in data
+
+
+def test_voice_missing_gemini_api_key(monkeypatch):
+    """Test that voice returns clear error when GEMINI_API_KEY is missing outside test mock."""
+    from voice.service import VoiceService
+    from rag.gemini import GeminiClient
+
+    client_no_key = GeminiClient(api_key="")
+    voice_no_key = VoiceService(gemini_client=client_no_key)
+
+    # Temporarily clear PYTEST_CURRENT_TEST to simulate live production invocation
+    monkeypatch.delenv("PYTEST_CURRENT_TEST", raising=False)
+    monkeypatch.delenv("TESTING", raising=False)
+
+    res = voice_no_key.transcribe(b"SAMPLE_BYTES_FOR_LIVE_MODE", lang="en")
+    assert res["is_empty"] is True
+    assert "GEMINI_API_KEY" in res.get("error", "")

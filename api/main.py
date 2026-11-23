@@ -72,6 +72,12 @@ _latest_benchmark_cache = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
+
+    # Ensure required runtime folders exist on startup
+    from agent.browser_agent import SCREENSHOTS_DIR, AUDIT_LOGS_DIR
+    SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+    AUDIT_LOGS_DIR.mkdir(parents=True, exist_ok=True)
+
     # Auto-index corpus if database has no chunks
     if rag_service.db.count() == 0:
         indexed_count = rag_service.index_corpus()
@@ -82,19 +88,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="CivicPilot API", version="1.0.0", lifespan=lifespan)
 
-# Allow CORS origins from ALLOWED_ORIGINS env var
+# Allow CORS origins from ALLOWED_ORIGINS env var (comma-separated), defaulting to http://localhost:3000
 allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "").strip()
-cors_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
 if allowed_origins_env:
-    for o in allowed_origins_env.split(","):
-        stripped = o.strip()
-        if stripped and stripped not in cors_origins:
-            cors_origins.append(stripped)
+    cors_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+    if "http://localhost:3000" not in cors_origins:
+        cors_origins.append("http://localhost:3000")
 else:
-    cors_origins.append("*")
+    cors_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -256,6 +257,8 @@ async def voice_transcribe(
     audio_bytes = await file.read()
     mime = file.content_type or "audio/webm"
     res = voice_service.transcribe(audio_bytes=audio_bytes, mime_type=mime, lang=lang)
+    if "error" in res and not res.get("text"):
+        raise HTTPException(status_code=400, detail=res["error"])
     return res
 
 @app.post("/voice/turn")
@@ -270,6 +273,8 @@ async def voice_turn(
     audio_bytes = await file.read()
     mime = file.content_type or "audio/webm"
     transcription = voice_service.transcribe(audio_bytes=audio_bytes, mime_type=mime, lang=lang)
+    if "error" in transcription and not transcription.get("text"):
+        raise HTTPException(status_code=400, detail=transcription["error"])
     spoken_text = transcription.get("text", "").strip()
 
     if mode == "ask":
@@ -311,9 +316,16 @@ async def voice_turn(
 async def agent_start_fill(req: StartFillRequest):
     """Launches Playwright, navigates to mirror form, fills profile fields, and produces diff."""
     try:
+        mirror_target = req.portal_url or os.getenv("MIRROR_URL", "http://localhost:8000/mirror")
         return await registration_agent.start_fill(
             profile_data=req.profile,
-            portal_url=req.portal_url or "http://localhost:4000",
+            portal_url=mirror_target,
+        )
+    except RuntimeError as e:
+        # Gracefully handle Playwright / Chromium missing in cloud environments
+        raise HTTPException(
+            status_code=503,
+            detail=str(e),
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -223,26 +223,23 @@ export default function InterviewChat({ locale }: Props) {
           {messages.map((m, idx) => (
             <div
               key={idx}
-              className={`flex items-start gap-3 ${
-                m.sender === "user" ? "flex-row-reverse" : "flex-row"
-              }`}
+              className={`flex items-start gap-3 ${m.sender === "user" ? "flex-row-reverse" : "flex-row"
+                }`}
             >
               <div
-                className={`w-8 h-8 rounded-2xl flex items-center justify-center text-[11px] font-black shrink-0 shadow-xs ${
-                  m.sender === "user"
-                    ? "bg-slate-800 text-white"
-                    : "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white border border-emerald-400/40"
-                }`}
+                className={`w-8 h-8 rounded-2xl flex items-center justify-center text-[11px] font-black shrink-0 shadow-xs ${m.sender === "user"
+                  ? "bg-slate-800 text-white"
+                  : "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white border border-emerald-400/40"
+                  }`}
               >
                 {m.sender === "user" ? "YOU" : "AGY"}
               </div>
 
               <div
-                className={`max-w-[80%] rounded-2xl px-4 py-3 text-xs sm:text-sm leading-relaxed shadow-xs ${
-                  m.sender === "user"
-                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-tr-xs"
-                    : "glass-card text-slate-800 border border-emerald-500/15 rounded-tl-xs"
-                }`}
+                className={`max-w-[80%] rounded-2xl px-4 py-3 text-xs sm:text-sm leading-relaxed shadow-xs ${m.sender === "user"
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-tr-xs"
+                  : "glass-card text-slate-800 border border-emerald-500/15 rounded-tl-xs"
+                  }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <span>{m.text}</span>
@@ -393,11 +390,10 @@ export default function InterviewChat({ locale }: Props) {
 
               <div>
                 <span
-                  className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-black tracking-wide ${
-                    verdict.verdict === "ELIGIBLE"
-                      ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                      : "bg-rose-100 text-rose-800 border border-rose-300"
-                  }`}
+                  className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-black tracking-wide ${verdict.verdict === "ELIGIBLE"
+                    ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                    : "bg-rose-100 text-rose-800 border border-rose-300"
+                    }`}
                 >
                   {verdict.verdict === "ELIGIBLE" ? (
                     <>
@@ -492,11 +488,10 @@ export default function InterviewChat({ locale }: Props) {
               {whatifDiff && (
                 <div>
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      whatifDiff.new_verdict === "ELIGIBLE"
-                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                        : "bg-rose-100 text-rose-800 border border-rose-300"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-bold ${whatifDiff.new_verdict === "ELIGIBLE"
+                      ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                      : "bg-rose-100 text-rose-800 border border-rose-300"
+                      }`}
                   >
                     Simulated: {whatifDiff.new_verdict}
                   </span>

@@ -219,11 +219,10 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
       <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-2xs">
         <div className="flex items-center justify-between text-xs font-bold text-gray-500 overflow-x-auto gap-2">
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              workflowState === "PROFILE" || workflowState === "FILLING"
-                ? "bg-blue-50 text-blue-700 border border-blue-200"
-                : "text-emerald-700 bg-emerald-50"
-            }`}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${workflowState === "PROFILE" || workflowState === "FILLING"
+              ? "bg-blue-50 text-blue-700 border border-blue-200"
+              : "text-emerald-700 bg-emerald-50"
+              }`}
           >
             <span>1.</span>
             <span>{locale === "hi" ? "सत्यापित प्रोफाइल" : "Verified Profile"}</span>
@@ -232,13 +231,12 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
           <span>➔</span>
 
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              workflowState === "DIFF_VIEW"
-                ? "bg-blue-50 text-blue-700 border border-blue-200"
-                : workflowState === "OTP_PAUSED" || workflowState === "SUBMITTED"
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${workflowState === "DIFF_VIEW"
+              ? "bg-blue-50 text-blue-700 border border-blue-200"
+              : workflowState === "OTP_PAUSED" || workflowState === "SUBMITTED"
                 ? "text-emerald-700 bg-emerald-50"
                 : "text-gray-400"
-            }`}
+              }`}
           >
             <span>2.</span>
             <span>{locale === "hi" ? "डिफ निरीक्षण व अनुमोदन" : "Diff Inspection & Approval"}</span>
@@ -247,13 +245,12 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
           <span>➔</span>
 
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              workflowState === "OTP_PAUSED"
-                ? "bg-blue-50 text-blue-700 border border-blue-200"
-                : workflowState === "SUBMITTED"
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${workflowState === "OTP_PAUSED"
+              ? "bg-blue-50 text-blue-700 border border-blue-200"
+              : workflowState === "SUBMITTED"
                 ? "text-emerald-700 bg-emerald-50"
                 : "text-gray-400"
-            }`}
+              }`}
           >
             <span>3.</span>
             <span>{locale === "hi" ? "आधार ओटीपी व सहमति" : "Aadhaar OTP & Consent"}</span>
@@ -262,11 +259,10 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
           <span>➔</span>
 
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              workflowState === "SUBMITTED"
-                ? "bg-emerald-600 text-white shadow-xs"
-                : "text-gray-400"
-            }`}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap ${workflowState === "SUBMITTED"
+              ? "bg-emerald-600 text-white shadow-xs"
+              : "text-gray-400"
+              }`}
           >
             <span>4.</span>
             <span>{locale === "hi" ? "पंजीकरण व ऑडिट लॉग" : "Submission & Audit Log"}</span>
@@ -434,22 +430,20 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
                 <button
                   type="button"
                   onClick={() => setActiveScreenshotTab("after")}
-                  className={`px-3 py-1 rounded-md transition ${
-                    activeScreenshotTab === "after"
-                      ? "bg-white text-blue-700 shadow-2xs"
-                      : "text-gray-500"
-                  }`}
+                  className={`px-3 py-1 rounded-md transition ${activeScreenshotTab === "after"
+                    ? "bg-white text-blue-700 shadow-2xs"
+                    : "text-gray-500"
+                    }`}
                 >
                   After Fill (Populated)
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveScreenshotTab("before")}
-                  className={`px-3 py-1 rounded-md transition ${
-                    activeScreenshotTab === "before"
-                      ? "bg-white text-blue-700 shadow-2xs"
-                      : "text-gray-500"
-                  }`}
+                  className={`px-3 py-1 rounded-md transition ${activeScreenshotTab === "before"
+                    ? "bg-white text-blue-700 shadow-2xs"
+                    : "text-gray-500"
+                    }`}
                 >
                   Before Fill (Blank)
                 </button>
@@ -589,11 +583,10 @@ export default function RegistrationAgent({ locale }: RegistrationAgentProps) {
 
             {/* MANDATORY CITIZEN CONSENT CHECKBOX */}
             <div
-              className={`p-4 rounded-xl border transition ${
-                explicitConsent
-                  ? "bg-emerald-50/70 border-emerald-300"
-                  : "bg-red-50/40 border-red-200"
-              }`}
+              className={`p-4 rounded-xl border transition ${explicitConsent
+                ? "bg-emerald-50/70 border-emerald-300"
+                : "bg-red-50/40 border-red-200"
+                }`}
             >
               <label className="flex items-start gap-3 cursor-pointer">
                 <input

@@ -75,23 +75,40 @@ class PlaywrightRegistrationAgent:
         return portal_url
 
     async def start_fill(
-        self, profile_data: Dict[str, Any], portal_url: str = "http://localhost:8000/mirror"
+        self, profile_data: Dict[str, Any], portal_url: Optional[str] = None
     ) -> StartFillResponse:
         """Launches browser, takes blank screenshot, fills form fields, takes filled screenshot,
         and computes field diffs."""
-        portal_url = self._ensure_mirror_available(portal_url)
+        resolved_url = portal_url or os.getenv("MIRROR_URL", "http://localhost:8000/mirror")
+        resolved_url = self._ensure_mirror_available(resolved_url)
         profile = RegistrationProfile.from_dict(profile_data)
         session_id = f"sess_{uuid.uuid4().hex[:12]}"
 
-        # Initialize Playwright
-        pw = await async_playwright().start()
-        browser = await pw.chromium.launch(headless=True)
-        context = await browser.new_context(viewport={"width": 1280, "height": 920})
-        page = await context.new_page()
+        # Initialize Playwright with graceful failure handling if Chromium is missing
+        try:
+            pw = await async_playwright().start()
+            browser = await pw.chromium.launch(headless=True)
+            context = await browser.new_context(viewport={"width": 1280, "height": 920})
+            page = await context.new_page()
+        except Exception as e:
+            err_msg = str(e)
+            if (
+                "Executable doesn't exist" in err_msg
+                or "playwright install" in err_msg
+                or "Chromium" in err_msg
+                or "browserType.launch" in err_msg
+            ):
+                raise RuntimeError(
+                    "Playwright Chromium browser is unavailable in this environment. "
+                    "Headless browser automation requires Chromium (e.g. 'playwright install chromium'). "
+                    "For cloud deployments on Render free tier without Chromium installed, "
+                    "please refer to the demo video or run the form agent locally."
+                ) from e
+            raise RuntimeError(f"Failed to launch browser automation: {err_msg}") from e
 
         try:
             # Navigate to portal
-            await page.goto(portal_url, timeout=15000, wait_until="domcontentloaded")
+            await page.goto(resolved_url, timeout=15000, wait_until="domcontentloaded")
             await page.wait_for_selector("#registrationForm", timeout=10000)
 
             # 1. Take Before Screenshot
